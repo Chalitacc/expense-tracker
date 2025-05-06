@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import styles from "../ExpenseList/ExpenseList.module.css";
 
-const ExpenseList = ({ expenses }) => {
+const ExpenseList = ({ expenses, onDelete, onEdit }) => {
   return (
     <div>
-      <h2>Expense List</h2>
-      {expenses.map((expense) => (
-        <li key={expense.id}>
-          <strong>{expense.title}</strong> — ${expense.amount} on {expense.date}{" "}
-          [{expense.category}]
-          <button onClick={() => onDelete(expense.id)}>Delete</button>
-        </li>
-      ))}
+      <h2>Expenses</h2>
+      {expenses.length === 0 ? (
+        <p>No expenses found</p>
+      ) : (
+        <ul>
+          {expenses.map((expense) => (
+            <li key={expense.id}>
+              <div className={styles.textContainer}>
+                Expense for {expense.title} is on ${expense.amount} on{" "}
+                {expense.date}. Category: {expense.category}
+              </div>
+              <div className={styles.toolsContainer}>
+                <button onClick={() => onEdit(expense)}>Edit</button>
+                <button onClick={() => onDelete(expense.id)}>Delete</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

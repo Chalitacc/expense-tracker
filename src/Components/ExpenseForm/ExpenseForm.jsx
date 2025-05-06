@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../ExpenseForm/ExpenseForm.module.css";
 import { v4 as uuidv4 } from "uuid";
 
-const ExpenseForm = ({ onAddExpenses }) => {
+const ExpenseForm = ({
+  onAddExpenses,
+  onAddOrEditExpense,
+  editingExpense,
+  clearEditing,
+}) => {
   const [expenseDetails, setExpenseDetails] = useState({
     title: "",
     amount: "",
@@ -13,7 +18,11 @@ const ExpenseForm = ({ onAddExpenses }) => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  //   const [expenseList, setExpenseList] = useState([]);
+  useEffect(() => {
+    if (editingExpense) {
+      setExpenseDetails(editingExpense);
+    }
+  }, [editingExpense]);
 
   const handleValidation = (inputName, inputValue) => {
     const errors = { ...errorMessage };
@@ -21,24 +30,28 @@ const ExpenseForm = ({ onAddExpenses }) => {
 
     if (!expenseDetails.title.trim()) {
       errors.titleError = "Title for expense is required!";
+      isValid = false;
     } else {
       errors.titleError = "";
     }
 
     if (!expenseDetails.amount.trim()) {
       errors.amountError = "Amount of expense is required!";
+      isValid = false;
     } else {
       errors.amountError = "";
     }
 
     if (!expenseDetails.date) {
       errors.dateError = "Date is required";
+      isValid = false;
     } else {
       errors.date = "";
     }
 
     if (!expenseDetails.category) {
       errors.categoryError = "Please choose a category for the expense!";
+      isValid = false;
     } else {
       errors.categoryError = "";
     }
@@ -62,22 +75,25 @@ const ExpenseForm = ({ onAddExpenses }) => {
     e.preventDefault();
     const isFormValid = handleValidation();
 
-    // if (!isFormValid) {
-    //   return;
-    // } else {
-    //   //   onAddExpense(expenseDetails);
-    //   setExpenseList((prev) => [...prev, expenseDetails]);
-    //   setExpenseDetails({
-    //     title: "",
-    //     amount: "",
-    //     date: "",
-    //     category: "",
-    //     id: uuidv4(),
-    //   });
-    // }
+    if (!isFormValid) {
+      return;
+    } else {
+      onAddOrEditExpense(expenseDetails);
 
-    if (!isFormValid) return;
-    onAddExpenses(expenseDetails);
+      setExpenseDetails({
+        title: "",
+        amount: "",
+        date: "",
+        category: "",
+        id: uuidv4(),
+      });
+      setErrorMessage({});
+    }
+  };
+
+  // cancel
+  const handleCancel = () => {
+    clearEditing();
     setExpenseDetails({
       title: "",
       amount: "",
@@ -90,7 +106,7 @@ const ExpenseForm = ({ onAddExpenses }) => {
 
   return (
     <div>
-      <form className={styles.formContainer} onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         {/* ---------------- */}
         <div className={styles.formGroup}>
           <label htmlFor="title">Title of Expense:</label>
@@ -148,7 +164,10 @@ const ExpenseForm = ({ onAddExpenses }) => {
           </select>
           <p className={styles.errorMessage}>{errorMessage.categoryError}</p>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">
+          {editingExpense ? "Update expense" : "Add Expense"}
+        </button>
+        {editingExpense && <button onClick={handleCancel}>Cancel Edit</button>}
       </form>
     </div>
   );
