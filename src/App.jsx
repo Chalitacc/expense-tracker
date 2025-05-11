@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./App.module.css";
 import ExpenseForm from "./Components/ExpenseForm/ExpenseForm";
 import ExpenseList from "./Components/ExpenseList/ExpenseList";
+import ExpenseFilter from "./Components/ExpenseFilter/ExpenseFilter";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -43,9 +44,15 @@ function App() {
     setExpenses(updateExpense);
   };
 
+  // filter
+
   const filtereExpense = filterMonth
     ? expenses.filter((exp) => exp.date.slice(5, 7) === filterMonth)
     : expenses;
+
+  const handleFilterChangge = (month) => {
+    setFilterMonth(month);
+  };
 
   const totalAmount = filtereExpense.reduce(
     (acc, curr) => acc + parseFloat(curr.amount),
@@ -53,32 +60,39 @@ function App() {
   );
 
   return (
-    <div>
-      <div className={styles.headerContainer}>
+    <div className={styles.rootContainer}>
+      <header className={styles.headerContainer}>
         <h1>Expense Tracker</h1>
-      </div>
+      </header>
 
-      {/* Expense form */}
-      <div className={styles.formContainer}>
-        <ExpenseForm
-          onAddExpenses={handleAddExpenses}
-          onAddOrEditExpense={handleAddOrEdit}
-          editingExpense={editingExpense}
-          clearEditing={() => setEditingExpense(null)}
-        ></ExpenseForm>
-      </div>
-
-      {/* Expense list */}
-      <div className={styles.expenseListContainer}>
-        <div className={styles.totalExpenseContainer}>
-          <h2>Total Expense: ${totalAmount.toFixed(2)}</h2>
-          <ExpenseList
-            expenses={filtereExpense}
-            onDelete={handleDelete}
-            onEdit={handleStartEdit}
-          ></ExpenseList>
+      <main>
+        {/* Expense form */}
+        <div>
+          <ExpenseForm
+            onAddExpenses={handleAddExpenses}
+            onAddOrEditExpense={handleAddOrEdit}
+            editingExpense={editingExpense}
+            clearEditing={() => setEditingExpense(null)}
+          ></ExpenseForm>
         </div>
-      </div>
+
+        {/* Expense list */}
+        <div className={styles.expenseListContainer}>
+          <div className={styles.totalExpenseContainer}>
+            <h2>Total Expense: ${totalAmount.toFixed(2)}</h2>
+            <div className={styles.listItemContainer}>
+              <ExpenseFilter
+                onFilterChange={handleFilterChangge}
+              ></ExpenseFilter>
+              <ExpenseList
+                expenses={filtereExpense}
+                onDelete={handleDelete}
+                onEdit={handleStartEdit}
+              ></ExpenseList>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

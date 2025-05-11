@@ -17,6 +17,7 @@ const ExpenseForm = ({
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [uploadStatus, setUploadStatus] = useState("");
 
   useEffect(() => {
     if (editingExpense) {
@@ -64,7 +65,6 @@ const ExpenseForm = ({
     const { name, value } = e.target;
     setExpenseDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
 
-    // for validation
     setErrorMessage((prevDetails) => ({
       ...prevDetails,
       [`${name}Error`]: "",
@@ -76,8 +76,10 @@ const ExpenseForm = ({
     const isFormValid = handleValidation();
 
     if (!isFormValid) {
+      setUploadStatus("Please fill out all the fields!");
       return;
     } else {
+      setUploadStatus("Expense submitted successfully! ");
       onAddOrEditExpense(expenseDetails);
 
       setExpenseDetails({
@@ -105,7 +107,7 @@ const ExpenseForm = ({
   };
 
   return (
-    <div>
+    <div className={styles.formContainer}>
       <form className={styles.form} onSubmit={handleSubmit}>
         {/* ---------------- */}
         <div className={styles.formGroup}>
@@ -164,10 +166,11 @@ const ExpenseForm = ({
           </select>
           <p className={styles.errorMessage}>{errorMessage.categoryError}</p>
         </div>
-        <button type="submit">
+        <button type="submit" className={styles.submitButton}>
           {editingExpense ? "Update expense" : "Add Expense"}
         </button>
         {editingExpense && <button onClick={handleCancel}>Cancel Edit</button>}
+        {uploadStatus && <p>{uploadStatus}</p>}
       </form>
     </div>
   );

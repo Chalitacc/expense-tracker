@@ -4,7 +4,7 @@ import styles from "../ExpenseList/ExpenseList.module.css";
 const ExpenseList = ({ expenses, onDelete, onEdit }) => {
   return (
     <div>
-      <h2>Expenses</h2>
+      <h2 className={styles.titleForExpenseList}>Expenses</h2>
       {expenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
