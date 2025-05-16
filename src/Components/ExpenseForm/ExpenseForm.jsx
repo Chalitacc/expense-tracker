@@ -169,7 +169,11 @@ const ExpenseForm = ({
         <button type="submit" className={styles.submitButton}>
           {editingExpense ? "Update expense" : "Add Expense"}
         </button>
-        {editingExpense && <button onClick={handleCancel}>Cancel Edit</button>}
+        {editingExpense && (
+          <button onClick={handleCancel} className={styles.cancelButton}>
+            Cancel Edit
+          </button>
+        )}
         {uploadStatus && <p>{uploadStatus}</p>}
       </form>
     </div>

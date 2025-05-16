@@ -79,11 +79,17 @@ function App() {
         {/* Expense list */}
         <div className={styles.expenseListContainer}>
           <div className={styles.totalExpenseContainer}>
-            <h2>Total Expense: ${totalAmount.toFixed(2)}</h2>
-            <div className={styles.listItemContainer}>
+            <h2 className={styles.totalExpense}>
+              Total Expense: ${totalAmount.toFixed(2)}
+            </h2>
+            <div className={styles.listItemHeader}>
+              <h2>Expenses</h2>
               <ExpenseFilter
+                className={styles.filter}
                 onFilterChange={handleFilterChangge}
               ></ExpenseFilter>
+            </div>
+            <div className={styles.expenseList}>
               <ExpenseList
                 expenses={filtereExpense}
                 onDelete={handleDelete}
