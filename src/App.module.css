@@ -12,20 +12,25 @@
 
 .headerContainer {
   background-image: linear-gradient(135deg, #e79dec 10%, #a546a5 100%);
+  width: 100%;
   min-height: 100px;
+  padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .expenseListContainer {
   display: flex;
   flex-direction: column;
   max-width: 600px;
+  width: 100%;
   height: auto;
   justify-content: center;
   align-items: center;
   margin: 0 auto 40px;
+  padding: 0 1rem;
 }
 
 .totalExpenseContainer {
@@ -50,7 +55,25 @@
   justify-content: space-between;
   align-items: center;
   background-image: linear-gradient(135deg, #ff96f9 10%, #c32bac 100%);
-  min-width: 600px;
+  max-width: 600px;
+  width: 100%;
   border-radius: 1rem;
   padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .headerContainer {
+    padding: 0.75rem;
+    text-align: center;
+  }
+
+  .listItemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .filter {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
